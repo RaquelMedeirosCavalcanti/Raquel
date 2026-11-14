@@ -1,9 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {readFileSync} from 'node:fs';
 import {matchingSeriesSessions,sessionExercises,withExerciseSets,setsLabel} from '../lib/strength-series.ts';
-const plan=JSON.parse(readFileSync(new URL('../lib/training-plan.json',import.meta.url)));
-const original=plan.sessions.find(s=>s.kind==='strength'&&s.workout==='B');
+const original={id:'example-b',kind:'strength',workout:'B',hasPlan:true,status:'planned',date:'2026-01-05',actualDate:'2026-01-05',title:'Treino B',planNotes:'2 séries por exercício.',notes:''};
+const plan={sessions:[original,{...original,id:'example-b-next',date:'2026-01-12'},{...original,id:'example-a',workout:'A',date:'2026-01-12'}]};
 
 test('limits the sequence to planned sessions with the same workout model',()=>{
  const data=[original,...['planned','completed','adapted','light','skipped'].map((status,i)=>({...original,id:`b-${i}`,status})),{...original,id:'other-model',workout:'A'},{...original,id:'unplanned',hasPlan:false},{...original,id:'run',kind:'run'}];
