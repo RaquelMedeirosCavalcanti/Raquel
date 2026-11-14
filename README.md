@@ -4,7 +4,7 @@ Aplicativo pessoal para planejar e acompanhar corridas, musculação, caminhadas
 
 **Aplicativo:** https://meu-ritmo.kel-meu-ritmo.workers.dev
 
-O aplicativo exige autenticação. O repositório contém o código e o planejamento original; as realizações, observações e credenciais ficam fora do GitHub, no ambiente privado da Cloudflare.
+O aplicativo exige autenticação. O repositório contém o código e um exemplo de configuração. As imagens pessoais, o PDF, o planejamento individual, as realizações, observações e credenciais ficam fora do GitHub, no ambiente privado da Cloudflare.
 
 ## O que é um repositório?
 
@@ -32,7 +32,7 @@ Guardar código no GitHub e hospedar um aplicativo são tarefas diferentes: o Gi
 | `lib/` | Regras: totais, modalidades, calorias, distâncias e conciliação Garmin. |
 | `db/` | Estrutura das tabelas e conexão com o banco D1. |
 | `drizzle/` | Migrações SQL: instruções versionadas para criar e evoluir tabelas. |
-| `public/` | Imagens, ícones, manifesto e PDF do planejamento original. |
+| `public/` | Arquivos estáticos e manifesto. Imagens pessoais e PDF são mantidos apenas na hospedagem. |
 | `worker/` | Entrada do servidor, validação do login e tarefa horária Garmin. |
 | `tests/` | Verificações automatizadas das regras e da autenticação. |
 | `scripts/` | Comandos auxiliares para instalação, build e publicação. |
@@ -48,6 +48,7 @@ Requer Node.js 24 ou mais recente e pnpm na versão indicada em `package.json`.
 ```bash
 corepack enable
 pnpm install --frozen-lockfile
+node scripts/prepare-project.mjs
 pnpm test
 pnpm typecheck
 pnpm build
@@ -70,3 +71,9 @@ Não coloque tokens ou backups privados no repositório. As variáveis usadas no
 O servidor tem um Cron Trigger horário. Com o aplicativo aberto também há verificações periódicas, respeitando o intervalo mínimo de 15 minutos. Os treinos precisam estar sincronizados com Garmin Connect antes da importação.
 
 O endereço anterior em ChatGPT Sites continua separado. Edições feitas lá após a migração não são copiadas automaticamente para esta versão.
+
+## Arquivos pessoais e instalação nova
+
+`pnpm build` e `pnpm dev` criam `lib/training-plan.json` a partir de `lib/training-plan.example.json` quando esse arquivo ainda não existe. A instalação atual mantém o planejamento original. Uma instalação nova usa o exemplo sem registros pessoais.
+
+Os arquivos pessoais de imagem, ícones e PDF não são distribuídos no repositório público. Eles continuam disponíveis no aplicativo hospedado e protegido por login. Em uma instalação nova, adicione suas próprias imagens em `public/` se desejar reproduzir a identidade visual.

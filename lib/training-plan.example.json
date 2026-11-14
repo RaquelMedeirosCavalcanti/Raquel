@@ -1,0 +1,215 @@
+{
+  "weeks": [
+    {
+      "start": "2026-01-05",
+      "title": "Semana 1",
+      "note": "Exemplo de planejamento. Cadastre suas atividades no aplicativo."
+    },
+    {
+      "start": "2026-01-12",
+      "title": "Semana 2",
+      "note": "Exemplo de planejamento. Cadastre suas atividades no aplicativo."
+    },
+    {
+      "start": "2026-01-19",
+      "title": "Semana 3",
+      "note": "Exemplo de planejamento. Cadastre suas atividades no aplicativo."
+    },
+    {
+      "start": "2026-01-26",
+      "title": "Semana 4",
+      "note": "Exemplo de planejamento. Cadastre suas atividades no aplicativo."
+    },
+    {
+      "start": "2026-02-02",
+      "title": "Semana 5",
+      "note": "Exemplo de planejamento. Cadastre suas atividades no aplicativo."
+    },
+    {
+      "start": "2026-02-09",
+      "title": "Semana 6",
+      "note": "Exemplo de planejamento. Cadastre suas atividades no aplicativo."
+    }
+  ],
+  "workouts": {
+    "A": {
+      "title": "Quadríceps + fullbody",
+      "duration": "45–60 min",
+      "exercises": [
+        [
+          "Agachamento livre",
+          3,
+          "6–10",
+          "2–3 min"
+        ],
+        [
+          "Cadeira extensora",
+          2,
+          "10–15",
+          "60–90 s"
+        ],
+        [
+          "Mesa flexora",
+          3,
+          "10–15",
+          "Cerca de 2 min"
+        ],
+        [
+          "Supino com halteres",
+          3,
+          "8–12",
+          "Cerca de 2 min"
+        ],
+        [
+          "Remada baixa na polia",
+          3,
+          "8–12",
+          "Cerca de 2 min"
+        ],
+        [
+          "Panturrilha em pé",
+          3,
+          "10–15",
+          "60–90 s"
+        ],
+        [
+          "Rosca direta na polia",
+          2,
+          "10–15",
+          "60–90 s"
+        ]
+      ],
+      "notes": "Amplitude confortável; não quique na panturrilha. Se domingo deixou as pernas pesadas, reduza A antes de aumentar cargas."
+    },
+    "B": {
+      "title": "Superiores e braços",
+      "duration": "45–60 min",
+      "exercises": [
+        [
+          "Supino inclinado com halteres",
+          3,
+          "8–12",
+          "90–120 s"
+        ],
+        [
+          "Puxada alta neutra",
+          3,
+          "8–12",
+          "90–120 s"
+        ],
+        [
+          "Desenvolvimento sentado",
+          2,
+          "8–12",
+          "90–120 s"
+        ],
+        [
+          "Elevação lateral",
+          2,
+          "12–20",
+          "60–90 s"
+        ],
+        [
+          "Rosca martelo",
+          2,
+          "10–15",
+          "60–90 s"
+        ],
+        [
+          "Tríceps na corda",
+          3,
+          "10–15",
+          "60–90 s"
+        ],
+        [
+          "Dead bug",
+          2,
+          "6–10/lado",
+          "60–90 s"
+        ]
+      ],
+      "notes": "Não acrescente pernas. Rosca e tríceps podem ser alternados. Dead bug devagar, expirando e mantendo a lombar confortável."
+    },
+    "C": {
+      "title": "Posterior, glúteos + fullbody",
+      "duration": "45–60 min",
+      "exercises": [
+        [
+          "Terra romeno com halteres",
+          3,
+          "8–10",
+          "2–3 min"
+        ],
+        [
+          "Subida no banco com halteres",
+          3,
+          "8–10/perna",
+          "2–3 min"
+        ],
+        [
+          "Supino na máquina",
+          3,
+          "8–12",
+          "Cerca de 2 min"
+        ],
+        [
+          "Remada com apoio para o peito",
+          3,
+          "8–12",
+          "Cerca de 2 min"
+        ],
+        [
+          "Panturrilha sentada",
+          3,
+          "12–20",
+          "60–90 s"
+        ],
+        [
+          "Coice na polia",
+          2,
+          "12–15/perna",
+          "60–90 s"
+        ],
+        [
+          "Tríceps na corda",
+          2,
+          "10–15",
+          "60–90 s"
+        ]
+      ],
+      "notes": "No terra, leve o quadril para trás preservando a posição da coluna. Use banco estável, baixo/moderado, sem impulsionar com a perna de baixo."
+    },
+    "D": {
+      "title": "Complementar opcional",
+      "duration": "20–25 min",
+      "exercises": [
+        [
+          "Elevação lateral",
+          2,
+          "12–20",
+          "Não especificado no PDF"
+        ],
+        [
+          "Rosca na polia",
+          2,
+          "10–15",
+          "Não especificado no PDF"
+        ],
+        [
+          "Tríceps na corda",
+          2,
+          "10–15",
+          "Não especificado no PDF"
+        ],
+        [
+          "Pallof press na polia",
+          2,
+          "10–12/lado",
+          "Não especificado no PDF"
+        ]
+      ],
+      "notes": "Depois da corrida leve ou em outro horário, preferencialmente separado por algumas horas. Sem falha, sem pernas e sem elíptico obrigatório. Só se A/B/C e corridas estiverem bem tolerados."
+    }
+  },
+  "sessions": []
+}

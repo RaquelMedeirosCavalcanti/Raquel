@@ -1,0 +1,6 @@
+CREATE TABLE `run_sessions` (
+	`id` text PRIMARY KEY NOT NULL,
+	`user_id` text NOT NULL,
+	`data` text NOT NULL,
+	`updated_at` text NOT NULL
+);
