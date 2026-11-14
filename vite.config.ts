@@ -17,7 +17,8 @@ const localBindingConfig = {
   name: "meu-ritmo",
   compatibility_date: "2026-11-14",
   compatibility_flags: ["nodejs_compat"],
-  observability: { enabled: true, traces: { enabled: true } },
+  observability: { enabled: true, redact_query_string: true, traces: { enabled: true } },
+  assets: { directory: './public', binding: 'ASSETS', run_worker_first: true },
   d1_databases: d1
     ? [
         {

@@ -7,6 +7,7 @@ declare namespace Cloudflare {
     ACCESS_TEAM_DOMAIN?: string;
     ACCESS_AUD?: string;
     DB?: D1Database;
+    ASSETS?: Fetcher;
     BUCKET?: R2Bucket;
   }
 }

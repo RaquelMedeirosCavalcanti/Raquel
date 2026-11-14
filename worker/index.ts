@@ -1,6 +1,7 @@
 import handler from 'vinext/server/fetch-handler';
 import {verifyAccessToken} from '../lib/access-token';
 import {syncGarmin} from '../lib/garmin-sync';
+import {SHARE_COOKIE,cookieValue,sharingPath,sharedOwner,privateResponse} from '../lib/share-access';
 type Certs={keys:(JsonWebKey&{kid?:string})[]};
 let certCache:{issuer:string;expires:number;certs:Certs}|undefined;
 async function certs(issuer:string){
@@ -17,14 +18,27 @@ export default {
   if(url.pathname==='/health')return Response.json({status:'ok',app:'meu-ritmo-kel'});
   const h=new Headers(request.headers);
   for(const name of [...h.keys()])if(name.startsWith('oai-authenticated-')||name.startsWith('x-meu-ritmo-'))h.delete(name);
+  const sharing=sharingPath(url.pathname);
+  if(sharing){
+   if(!['GET','HEAD'].includes(request.method))return privateResponse(new Response('Somente leitura.',{status:405,headers:{Allow:'GET, HEAD'}}));
+   const token=sharing==='asset'?cookieValue(request,SHARE_COOKIE):url.searchParams.get('chave')||'';
+   let owner:string|null;
+   try{owner=await sharedOwner(env.DB!,token)}catch{return privateResponse(new Response('Consulta temporariamente indisponível.',{status:503}))}
+   if(owner){
+    const response=sharing==='asset'?await env.ASSETS!.fetch(request):await handler.fetch(new Request(request,{headers:h}),env,ctx);
+    return privateResponse(response,sharing==='page'?token:undefined);
+   }
+   if(sharing!=='asset')return privateResponse(new Response('Link de consulta inválido ou cancelado.',{status:404}));
+  }
   const issuer=env.ACCESS_TEAM_DOMAIN||'',aud=env.ACCESS_AUD||'';
   try{
-   const token=request.headers.get('cf-access-jwt-assertion')||'';
+   const token=request.headers.get('cf-access-jwt-assertion')||cookieValue(request,'CF_Authorization');
    const claims=await verifyAccessToken(token,issuer,aud,(await certs(issuer)).keys);
    const email=claims.email!.toLowerCase();
    h.set('x-meu-ritmo-email',email);
    h.set('x-meu-ritmo-user-id',email===env.SITE_OWNER_EMAIL?.toLowerCase()?env.OWNER_USER_ID!:'viewer:'+claims.sub);
   }catch{return new Response('Entre no Meu Ritmo pelo endereço protegido da Cloudflare.',{status:401,headers:{'Cache-Control':'no-store'}})}
+  if(sharing==='asset')return privateResponse(await env.ASSETS!.fetch(request));
   if(url.pathname==='/login'){
    const target=url.searchParams.get('return_to')||'/';
    return Response.redirect(url.origin+(target.startsWith('/')&&!target.startsWith('//')?target:'/'),302);

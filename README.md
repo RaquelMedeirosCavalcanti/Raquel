@@ -77,3 +77,7 @@ O endereço anterior em ChatGPT Sites continua separado. Edições feitas lá ap
 `pnpm build` e `pnpm dev` criam `lib/training-plan.json` a partir de `lib/training-plan.example.json` quando esse arquivo ainda não existe. A instalação atual mantém o planejamento original. Uma instalação nova usa o exemplo sem registros pessoais.
 
 Os arquivos pessoais de imagem, ícones e PDF não são distribuídos no repositório público. Eles continuam disponíveis no aplicativo hospedado e protegido por login. Em uma instalação nova, adicione suas próprias imagens em `public/` se desejar reproduzir a identidade visual.
+
+## Compartilhar somente leitura
+
+O botão Compartilhar gera um link com chave aleatória e revogável. Quem tiver o link pode consultar sem login e encaminhá-lo. A edição, criação de links e integração Garmin continuam protegidas pelo login pessoal. Cancelar o link bloqueia novas consultas. O servidor valida a chave em cada consulta e protege também os arquivos carregados pela página; os endereços de edição não aceitam essa chave como autenticação.

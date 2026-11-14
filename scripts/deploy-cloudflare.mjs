@@ -20,7 +20,7 @@ const session=await request(`/accounts/${account}/workers/scripts/${name}/assets
 let completion=session.jwt;
 for(const bucket of session.buckets){const form=new FormData();for(const hash of bucket){const f=contents.get(hash);form.append(hash,new Blob([f.data.toString('base64')],{type:f.type}),hash);}const result=await request(`/accounts/${account}/workers/assets/upload?base64=true`,form,'POST',session.jwt);if(result.jwt)completion=result.jwt;}
 const form=new FormData();
-form.append('metadata',new Blob([JSON.stringify({main_module:'index.js',compatibility_date:'2026-11-14',compatibility_flags:['nodejs_compat'],bindings:[{name:'DB',type:'d1',id:config.database_id}],keep_bindings:['secret_text','plain_text'],assets:{jwt:completion},observability:{enabled:true,traces:{enabled:true}}})],{type:'application/json'}));
+form.append('metadata',new Blob([JSON.stringify({main_module:'index.js',compatibility_date:'2026-11-14',compatibility_flags:['nodejs_compat'],bindings:[{name:'DB',type:'d1',id:config.database_id},{name:'ASSETS',type:'assets'}],keep_bindings:['secret_text','plain_text'],assets:{jwt:completion,config:{run_worker_first:true}},observability:{enabled:true,redact_query_string:true,traces:{enabled:true}}})],{type:'application/json'}));
 for(const file of await walk(path.join(root,'dist/server'))){if(!file.endsWith('.js')&&!file.endsWith('.mjs'))continue;const relative=path.relative(path.join(root,'dist/server'),file).split(path.sep).join('/');form.append(relative,new Blob([await readFile(file)],{type:'application/javascript+module'}),relative);}
 await request(`/accounts/${account}/workers/scripts/${name}`,form,'PUT');
 await request(`/accounts/${account}/workers/scripts/${name}/subdomain`,{enabled:true,previews_enabled:false});

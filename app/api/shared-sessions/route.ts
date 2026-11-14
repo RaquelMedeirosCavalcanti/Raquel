@@ -1,4 +1,3 @@
-import {getAppUser} from '../../auth';
 import {validShareToken} from '../../../lib/site-access';
 import {sessionsForUser} from '../../../lib/session-store';
 import {getDb} from '../../../db';
@@ -7,8 +6,6 @@ import {eq} from 'drizzle-orm';
 export const dynamic='force-dynamic';
 const json=(body:unknown,status=200)=>Response.json(body,{status,headers:{'Cache-Control':'no-store','Referrer-Policy':'no-referrer'}});
 export async function GET(req:Request){
- const user=await getAppUser();
- if(!user)return json({error:'Entre com a conta autorizada para visualizar os treinos de Kel.'},401);
  const token=new URL(req.url).searchParams.get('chave')||'';
  if(!validShareToken(token))return json({error:'Este link de consulta é inválido ou foi cancelado.'},404);
  try{
