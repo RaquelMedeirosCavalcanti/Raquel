@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import ts from 'typescript';
 import * as sharing from '../lib/share-access.ts';
+import * as shortLinks from '../lib/share-links.ts';
 const token='a'.repeat(64),owner='test-owner';
 function loadTs(file,imports){
  const code=ts.transpileModule(readFileSync(new URL(file,import.meta.url),'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
@@ -10,11 +11,26 @@ function loadTs(file,imports){
 }
 function harness(){
  let active=true,calls=[];
- const env={DB:{prepare:()=>({bind:key=>({first:async()=>active&&key===token?{owner_id:owner}:null})})},ASSETS:{fetch:async()=>new Response('private asset',{headers:{'Cache-Control':'public, max-age=31536000'}})}};
+ const env={DB:{prepare:()=>({bind:key=>({first:async()=>active&&key===token?{owner_id:owner}:null,all:async()=>({results:active&&key===token.slice(0,32)?[{token}]:[]})})})},ASSETS:{fetch:async()=>new Response('private asset',{headers:{'Cache-Control':'public, max-age=31536000'}})}};
  const handler={fetch:async req=>{calls.push({url:req.url,owner:req.headers.get('x-meu-ritmo-user-id')});return new Response('read-only page')}};
- const worker=loadTs('../worker/index.ts',{'vinext/server/fetch-handler':{default:handler},'../lib/access-token':{verifyAccessToken:async()=>{throw Error('Not authenticated')}},'../lib/garmin-sync':{},'../lib/share-access':sharing}).default;
+ const worker=loadTs('../worker/index.ts',{'vinext/server/fetch-handler':{default:handler},'../lib/access-token':{verifyAccessToken:async()=>{throw Error('Not authenticated')}},'../lib/garmin-sync':{},'../lib/share-access':sharing,'../lib/share-links':shortLinks}).default;
  return {request:(path,options={})=>worker.fetch(new Request('https://site.test'+path,options),env,{}),revoke:()=>active=false,calls};
 }
+test('short share links redirect within the site, reject writes and stop after cancellation',async()=>{
+ const h=harness(),path=shortLinks.shortSharePath(token);
+ assert.equal(path.length,25);
+ const r=await h.request(path);assert.equal(r.status,302);assert.equal(r.headers.get('location'),'https://site.test/visualizar?chave='+token);assert.equal(r.headers.get('cache-control'),'private, no-store');
+ assert.equal((await h.request(path,{method:'POST'})).status,405);
+ h.revoke();assert.equal((await h.request(path)).status,404);
+ assert.equal((await h.request('/v/invalid')).status,404);
+});
+test('compact codes are canonical and ambiguous prefixes fail closed',async()=>{
+ const code=shortLinks.shortSharePath(token).slice(3);
+ assert.equal(shortLinks.shortPrefix(code),token.slice(0,32));
+ for(const value of ['','bad',code+'=',code+'/extra'])assert.equal(shortLinks.shortPrefix(value),null);
+ const db={prepare:()=>({bind:()=>({all:async()=>({results:[{token},{token:'another-token'}]})})})};
+ assert.equal(await shortLinks.resolveShortShare(db,code),null);
+});
 test('anonymous sharing requires a live, valid link and strips forged owner headers',async()=>{
  const h=harness();
  for(const suffix of ['', '?chave=invalid','?chave='+'b'.repeat(64)])assert.equal((await h.request('/visualizar'+suffix)).status,404);

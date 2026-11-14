@@ -10,3 +10,5 @@ O acesso é protegido por Cloudflare Access. A conta proprietária mantém o mes
 Os links antigos em `chatgpt.site` pertencem à instalação anterior. Use o endereço da Cloudflare para novas alterações. O ícone salvo no celular também deve ser criado novamente a partir do novo endereço.
 
 As exceções da Cloudflare Access cobrem somente a página `/visualizar`, a API `/api/shared-sessions` e seus arquivos. O Worker valida a chave no banco e o cookie de consulta antes de servir esses arquivos. `run_worker_first` deve permanecer ativado. A proteção da página principal e das APIs de edição permanece ativa.
+
+O compartilhamento gera a versão compacta `/v/<codigo>`, sem serviços externos. O código preserva 128 bits aleatórios da chave original. A resolução consulta o mesmo registro revogável; cancelar o compartilhamento invalida tanto o endereço curto quanto o antigo.
