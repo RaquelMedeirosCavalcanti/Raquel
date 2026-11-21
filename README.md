@@ -81,3 +81,15 @@ Os arquivos pessoais de imagem, ícones e PDF não são distribuídos no reposit
 ## Compartilhar somente leitura
 
 O botão Compartilhar gera um link com chave aleatória e revogável. Quem tiver o link pode consultar sem login e encaminhá-lo. A edição, criação de links e integração Garmin continuam protegidas pelo login pessoal. Cancelar o link bloqueia novas consultas. O servidor valida a chave em cada consulta e protege também os arquivos carregados pela página; os endereços de edição não aceitam essa chave como autenticação.
+
+## Envio de planejamentos ao Garmin pelo Intervals.icu
+
+Na aba Garmin, a proprietária conecta sua chave pessoal do Intervals.icu. O app valida a conta e guarda a chave criptografada em `intervals_connections`, com AES-GCM e uma chave de 32 bytes em Base64 no segredo `INTERVALS_ENCRYPTION_KEY` do Worker. Aplique `drizzle/0003_intervals_connections.sql` antes de publicar essa versão. A chave pessoal não é devolvida pelas APIs nem incluída no repositório.
+
+A prévia permite selecionar corridas futuras ainda planejadas. Etapas ambíguas ficam indisponíveis para envio até serem revisadas. O app usa a API oficial de eventos do Intervals.icu (`events/bulk?upsert=true`), com identificadores externos estáveis para atualizar os mesmos treinos ao reenviar. Os registros de realização e a prescrição original no Meu Ritmo são preservados.
+
+O automático começa pausado: teste um treino no Garmin Connect e no relógio antes de ativá-lo. Quando ativado, envia ou atualiza os treinos futuros ao abrir o app, com intervalo mínimo de 15 minutos, e pelo Cron Trigger horário. A sincronização do Intervals.icu para o Garmin requer a autorização própria dessa plataforma e respeita sua janela de datas. A confirmação do app comprova recebimento no Intervals.icu, não entrega no relógio. Remover a conexão não apaga treinos que já foram enviados; cancelar ou apagar uma corrida no Meu Ritmo também não exclui automaticamente sua cópia externa.
+
+A chave permite configurar a conta atual sem pedir o ID do atleta: o endpoint usa o atleta `0`, correspondente à chave. Referências: [API pessoal](https://forum.intervals.icu/t/api-access-to-intervals-icu/609), [envio de treinos planejados](https://forum.intervals.icu/t/uploading-planned-workouts-to-intervals-icu/63624).
+
+O envio valida previamente o ritmo de limiar e as zonas de ritmo de corrida no Intervals.icu. Cada etapa inclui seu tipo explícito (aquecimento, corrida, intervalo, recuperação ou desaquecimento). A confirmação exige que a resposta preserve todas as etapas, durações, distâncias, repetições e limites de pace; uma resposta sem estrutura não é salva como sucesso. Treinos confirmados pela versão anterior são reenviados e validados na próxima seleção manual. Não é feita alteração automática no ritmo de limiar do atleta.
