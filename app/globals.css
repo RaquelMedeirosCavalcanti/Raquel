@@ -90,3 +90,11 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .routine-metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:20px;padding:20px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-bottom:18px}.routine-metrics dt{font-size:12px;color:var(--muted);margin-bottom:9px}.routine-metrics dd{font-size:20px;margin:0;font-variant-numeric:tabular-nums}.routine-metrics small{display:block;font-size:11px;color:var(--muted);margin-top:6px}.routine-notes{white-space:pre-wrap;color:var(--muted);font-size:13px;line-height:1.8;margin:16px 0}.routine-intro p{max-width:670px}
 @media(max-width:680px){.sidebar nav{grid-template-columns:repeat(6,minmax(0,1fr));gap:1px}.is-readonly .sidebar nav{grid-template-columns:repeat(5,minmax(0,1fr))}.sidebar .nav-item{font-size:9px;padding:8px 1px;gap:6px;min-width:0}.sidebar .nav-item svg{width:20px;height:20px}.routine-metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 12px}.routine-metrics dd{font-size:18px}}
 .history-period{padding:0 24px 12px}.history-period .period-toolbar{margin-top:0}@media(max-width:680px){.history-period{padding:0 16px 12px}}
+
+/* Compact exercise rows use the same rhythm in every workout. */
+.workout-table table{height:auto;table-layout:auto}
+.workout-table th{height:2.75rem;padding:.625rem;font-size:.875rem;line-height:1.4;white-space:nowrap}
+.workout-table tbody tr{height:3rem}
+.workout-table td{height:3rem;padding:.625rem;font-size:.875rem;line-height:1.4;vertical-align:middle;white-space:nowrap}
+.workout-table td:first-child{min-width:14rem}
+.training-card .plan-note{margin:1rem 0;font-size:.875rem;line-height:1.6;white-space:normal}
