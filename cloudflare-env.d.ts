@@ -1,5 +1,6 @@
 declare namespace Cloudflare {
   interface Env {
+    INTERVALS_ENCRYPTION_KEY?: string;
     GARMIN_PERSONAL_API_KEY?: string;
     GARMIN_OWNER_EMAIL?: string;
     SITE_OWNER_EMAIL?: string;

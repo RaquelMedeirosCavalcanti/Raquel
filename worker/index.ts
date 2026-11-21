@@ -1,6 +1,7 @@
 import handler from 'vinext/server/fetch-handler';
 import {verifyAccessToken} from '../lib/access-token';
 import {syncGarmin} from '../lib/garmin-sync';
+import {syncIntervals} from '../lib/intervals-connection';
 import {SHARE_COOKIE,cookieValue,sharingPath,sharedOwner,privateResponse} from '../lib/share-access';
 import {resolveShortShare} from '../lib/share-links';
 type Certs={keys:(JsonWebKey&{kid?:string})[]};
@@ -53,6 +54,7 @@ export default {
   return handler.fetch(new Request(request,{headers:h}),env,ctx);
  },
  async scheduled(_event:ScheduledController,env:Cloudflare.Env,ctx:ExecutionContext){
+  ctx.waitUntil(syncIntervals(env.OWNER_USER_ID!,{automatic:true}).then(r=>console.log(JSON.stringify({event:'intervals_sync',sent:r.sent}))).catch(()=>console.error(JSON.stringify({event:'intervals_sync_failed'}))));
   ctx.waitUntil(syncGarmin(env.OWNER_USER_ID!,env.SITE_OWNER_EMAIL!).then(r=>console.log(JSON.stringify({event:'garmin_sync',changed:r.changed}))).catch(()=>console.error(JSON.stringify({event:'garmin_sync_failed'}))));
  }
 };

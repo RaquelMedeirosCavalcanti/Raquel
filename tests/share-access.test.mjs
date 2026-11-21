@@ -13,7 +13,7 @@ function harness(){
  let active=true,calls=[];
  const env={DB:{prepare:()=>({bind:key=>({first:async()=>active&&key===token?{owner_id:owner}:null,all:async()=>({results:active&&key===token.slice(0,32)?[{token}]:[]})})})},ASSETS:{fetch:async()=>new Response('private asset',{headers:{'Cache-Control':'public, max-age=31536000'}})}};
  const handler={fetch:async req=>{calls.push({url:req.url,owner:req.headers.get('x-meu-ritmo-user-id')});return new Response('read-only page')}};
- const worker=loadTs('../worker/index.ts',{'vinext/server/fetch-handler':{default:handler},'../lib/access-token':{verifyAccessToken:async()=>{throw Error('Not authenticated')}},'../lib/garmin-sync':{},'../lib/share-access':sharing,'../lib/share-links':shortLinks}).default;
+ const worker=loadTs('../worker/index.ts',{'vinext/server/fetch-handler':{default:handler},'../lib/access-token':{verifyAccessToken:async()=>{throw Error('Not authenticated')}},'../lib/garmin-sync':{},'../lib/intervals-connection':{},'../lib/share-access':sharing,'../lib/share-links':shortLinks}).default;
  return {request:(path,options={})=>worker.fetch(new Request('https://site.test'+path,options),env,{}),revoke:()=>active=false,calls};
 }
 test('short share links redirect within the site, reject writes and stop after cancellation',async()=>{
@@ -53,7 +53,7 @@ test('share cookies never unlock owner APIs or unlinked static content',async()=
  const original=globalThis.fetch;globalThis.fetch=async()=>Response.json({keys:[]});
  try{
   const h=harness(),headers={cookie:sharing.SHARE_COOKIE+'='+token,'x-meu-ritmo-user-id':owner};
-  for(const path of ['/api/sessions','/api/shares','/api/garmin','/api/sessions/series'])assert.equal((await h.request(path,{method:'POST',headers})).status,401);
+  for(const path of ['/api/sessions','/api/shares','/api/garmin','/api/intervals','/api/sessions/series'])assert.equal((await h.request(path,{method:'POST',headers})).status,401);
   assert.equal((await h.request('/_next/static/app.js')).status,401);
   h.revoke();assert.equal((await h.request('/_next/static/app.js',{headers})).status,401);
  }finally{globalThis.fetch=original}
