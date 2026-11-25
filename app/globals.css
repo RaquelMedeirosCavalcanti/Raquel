@@ -119,3 +119,6 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .intervals-panel .btn,.intervals-panel .text-button{font-size:.95rem}
 .intervals-stages{margin:.75rem 0;padding-left:1.25rem;display:grid;gap:.75rem;font-size:.95rem}
 .intervals-stages p{margin-top:.2rem;color:var(--muted);line-height:1.6}
+
+/* Duration equivalents stay beside minutes and wrap on narrow screens. */
+.stat-value{display:flex;align-items:baseline;flex-wrap:wrap;column-gap:6px;row-gap:5px}.stat-value .duration-hours,.modality-total .duration-hours{font:500 14px 'DM Sans',sans-serif;color:var(--muted);white-space:nowrap}.current-week-button{margin-top:8px;font-size:14px}.routine-count{margin-top:18px}
